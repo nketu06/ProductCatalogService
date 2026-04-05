@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public abstract class BaseModel {
-    private long id;
-    private Date createdAt;
-    private Date lastUpdatedAt;
-    private State state;
+  private long id;
+  private Date createdAt;
+  private Date lastUpdatedAt;
+  private State state;
 }
