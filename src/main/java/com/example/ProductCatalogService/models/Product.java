@@ -1,6 +1,5 @@
 package com.example.ProductCatalogService.models;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +12,4 @@ public class Product extends BaseModel {
     private double price;
     private Category category;
     private boolean isSalesSpecific;
-
-
 }
