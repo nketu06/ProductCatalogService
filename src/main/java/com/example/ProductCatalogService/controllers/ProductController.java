@@ -7,6 +7,8 @@ import com.example.ProductCatalogService.models.State;
 import com.example.ProductCatalogService.services.ProductService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,9 +28,13 @@ public class ProductController {
   }
 
   @GetMapping("/products/{id}")
-  public ProductDto getProductById(@PathVariable("id") Long productId) {
+  public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
     Product product = productService.getProductById(productId);
-    return mapProductToProductDto(product);
+    if (product != null) {
+        ProductDto productDto = mapProductToProductDto(product);
+        return new ResponseEntity<>(productDto, HttpStatus.OK);
+    }
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
   @PostMapping("/products")
