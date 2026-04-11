@@ -1,5 +1,6 @@
 package com.example.ProductCatalogService.controllers;
 
+import com.example.ProductCatalogService.dtos.CategoryDto;
 import com.example.ProductCatalogService.dtos.ProductDto;
 import com.example.ProductCatalogService.models.Product;
 import com.example.ProductCatalogService.models.State;
@@ -26,16 +27,27 @@ public class ProductController {
 
   @GetMapping("/products/{id}")
   public ProductDto getProductById(@PathVariable("id") Long productId) {
-    ProductDto product = new ProductDto();
-    product.setId(productId);
-    product.setTitle("iPhone 13");
-    product.setDescription("The latest iPhone model with A15 Bionic chip.");
-    product.setPrice(999.99);
-    return product;
+    Product product = productService.getProductById(productId);
+    return mapProductToProductDto(product);
   }
 
   @PostMapping("/products")
   public ProductDto createProduct(@RequestBody ProductDto input) {
     return input;
+  }
+
+  private ProductDto mapProductToProductDto(Product product) {
+    ProductDto productDto = new ProductDto();
+    productDto.setId(product.getId());
+    productDto.setTitle(product.getTitle());
+    productDto.setDescription(product.getDescription());
+    productDto.setPrice(product.getPrice());
+    CategoryDto categoryDto = new CategoryDto();
+    categoryDto.setTitle(product.getCategory().getTitle());
+    categoryDto.setDescription(product.getCategory().getDescription());
+    categoryDto.setId(product.getCategory().getId());
+
+    productDto.setCategory(categoryDto);
+    return productDto;
   }
 }
