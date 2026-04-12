@@ -20,7 +20,7 @@ public class ProductService implements IProductService {
   @Override
   public Product getProductById(Long id) {
     // Implementation to retrieve a product by its ID
-    RestTemplate restTemplate = restTemplateBuilder.build();
+    //    RestTemplate restTemplate = restTemplateBuilder.build();
 
     //    here it directly returns the product without checking
     //      if the API call was successful or not, which can lead to a NullPointerException if the
@@ -33,10 +33,14 @@ public class ProductService implements IProductService {
 
     try {
       ResponseEntity<FakeStoreProductDto> fakeStoreDto =
-          restTemplate.getForEntity(
-              "https://fakestoreapi.com/products/{id}", FakeStoreProductDto.class, id);
+          requestForEntity(
+              HttpMethod.GET,
+              "https://fakestoreapi.com/products/{id}",
+              null,
+              FakeStoreProductDto.class,
+              id);
 
-      if (fakeStoreDto.getStatusCode().is2xxSuccessful() && fakeStoreDto.getBody() != null) {
+      if (validateFakeStoreResponse(fakeStoreDto)) {
         return mapFakeStoreDtoToProduct(fakeStoreDto.getBody());
       }
     } catch (RestClientResponseException ex) {
@@ -60,24 +64,37 @@ public class ProductService implements IProductService {
   @Override
   public Product replaceProduct(Long id, Product product) {
     FakeStoreProductDto fakeStoreProductDto = mapProductToFakeStoreDto(product);
-        ResponseEntity<FakeStoreProductDto> response =
-    putForEntity("https://fakestoreapi.com/products/{id}", fakeStoreProductDto, FakeStoreProductDto.class, id);
+    ResponseEntity<FakeStoreProductDto> response =
+        requestForEntity(
+            HttpMethod.PUT,
+            "https://fakestoreapi.com/products/{id}",
+            fakeStoreProductDto,
+            FakeStoreProductDto.class,
+            id);
 
-        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            return mapFakeStoreDtoToProduct(response.getBody());
-        }
+    if (validateFakeStoreResponse(response)) {
+      return mapFakeStoreDtoToProduct(response.getBody());
+    }
     return null; // Placeholder return statement
   }
 
-    private <T> ResponseEntity<T> putForEntity
-            (String url, @Nullable Object request, Class<T> responseType, Object... uriVariables)
-            throws RestClientException
-    {
-        RestTemplate restTemplate = restTemplateBuilder.build();
-      RequestCallback requestCallback = restTemplate.httpEntityCallback(request, responseType);
-        ResponseExtractor<ResponseEntity<T>> responseExtractor = restTemplate.responseEntityExtractor(responseType);
-        return restTemplate.execute(url, HttpMethod.PUT, requestCallback, responseExtractor, uriVariables);
-    }
+  private boolean validateFakeStoreResponse(ResponseEntity<?> response) {
+    return response.getStatusCode().is2xxSuccessful() && response.getBody() != null;
+  }
+
+  private <T> ResponseEntity<T> requestForEntity(
+      HttpMethod httpMethod,
+      String url,
+      @Nullable Object request,
+      Class<T> responseType,
+      Object... uriVariables)
+      throws RestClientException {
+    RestTemplate restTemplate = restTemplateBuilder.build();
+    RequestCallback requestCallback = restTemplate.httpEntityCallback(request, responseType);
+    ResponseExtractor<ResponseEntity<T>> responseExtractor =
+        restTemplate.responseEntityExtractor(responseType);
+    return restTemplate.execute(url, httpMethod, requestCallback, responseExtractor, uriVariables);
+  }
 
   private Product mapFakeStoreDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {
     Product product = new Product();

@@ -13,11 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/products")
 public class ProductController {
 
   @Autowired private ProductService productService;
 
-  @GetMapping("/products")
+  @GetMapping
   public List<Product> getAllProducts() {
     Product product = new Product();
     product.setId(1);
@@ -28,8 +29,11 @@ public class ProductController {
     return List.of(product);
   }
 
-  @GetMapping("/products/{id}")
+  @GetMapping("{id}")
   public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
+    if (productId <= 0) {
+      throw new IllegalArgumentException("Product ID cannot be zero or negative.");
+    }
     Product product = productService.getProductById(productId);
     if (product != null) {
       ProductDto productDto = mapProductToProductDto(product);
@@ -38,12 +42,12 @@ public class ProductController {
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
-  @PostMapping("/products")
+  @PostMapping
   public ProductDto createProduct(@RequestBody ProductDto input) {
     return input;
   }
 
-  @PutMapping("/products/{id}")
+  @PutMapping("{id}")
   public ResponseEntity<ProductDto> replaceProduct(
       @PathVariable("id") Long productId, @RequestBody ProductDto input) {
 
