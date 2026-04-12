@@ -2,6 +2,7 @@ package com.example.ProductCatalogService.controllers;
 
 import com.example.ProductCatalogService.dtos.CategoryDto;
 import com.example.ProductCatalogService.dtos.ProductDto;
+import com.example.ProductCatalogService.models.Category;
 import com.example.ProductCatalogService.models.Product;
 import com.example.ProductCatalogService.models.State;
 import com.example.ProductCatalogService.services.ProductService;
@@ -31,15 +32,27 @@ public class ProductController {
   public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
     Product product = productService.getProductById(productId);
     if (product != null) {
-        ProductDto productDto = mapProductToProductDto(product);
-        return new ResponseEntity<>(productDto, HttpStatus.OK);
+      ProductDto productDto = mapProductToProductDto(product);
+      return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
   @PostMapping("/products")
   public ProductDto createProduct(@RequestBody ProductDto input) {
     return input;
+  }
+
+  @PutMapping("/products/{id}")
+  public ResponseEntity<ProductDto> replaceProduct(
+      @PathVariable("id") Long productId, @RequestBody ProductDto input) {
+
+    Product product = productService.replaceProduct(productId, mapProductDtoToProduct(input));
+    if (product != null) {
+      ProductDto productDto = mapProductToProductDto(product);
+      return new ResponseEntity<>(productDto, HttpStatus.OK);
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
   private ProductDto mapProductToProductDto(Product product) {
@@ -55,5 +68,20 @@ public class ProductController {
 
     productDto.setCategory(categoryDto);
     return productDto;
+  }
+
+  private Product mapProductDtoToProduct(ProductDto productDto) {
+    Product product = new Product();
+    product.setId(productDto.getId());
+    product.setTitle(productDto.getTitle());
+    product.setDescription(productDto.getDescription());
+    product.setPrice(productDto.getPrice());
+    Category category = new Category();
+    category.setTitle(productDto.getCategory().getTitle());
+    category.setDescription(productDto.getCategory().getDescription());
+    category.setId(productDto.getCategory().getId());
+
+    product.setCategory(category);
+    return product;
   }
 }
