@@ -10,3 +10,15 @@ This command:
 - reformats Java files (and any other configured file types),
 - updates files in place,
 - helps keep formatting consistent before commit.
+
+## MySQL container access
+
+Use this command to open a shell inside the MySQL Docker container:
+
+```bash
+docker exec -it my-mysql bash
+```
+Once inside the container, you can access the MySQL command line interface with:
+    mysql -u root -p
+
+
