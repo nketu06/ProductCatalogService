@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.*;
 
 @Service
-public class ProductService implements IProductService {
+public class FakeStoreProductService implements IProductService {
 
   @Autowired private RestTemplateBuilder restTemplateBuilder;
 
@@ -76,6 +76,11 @@ public class ProductService implements IProductService {
       return mapFakeStoreDtoToProduct(response.getBody());
     }
     return null; // Placeholder return statement
+  }
+
+  @Override
+  public Boolean deleteProductById(Long id) {
+    return null;
   }
 
   private boolean validateFakeStoreResponse(ResponseEntity<?> response) {

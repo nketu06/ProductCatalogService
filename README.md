@@ -21,4 +21,7 @@ docker exec -it my-mysql bash
 Once inside the container, you can access the MySQL command line interface with:
     mysql -u root -p
 
+Resources to learn more about spring boot:
+https://www.baeldung.com
+
 

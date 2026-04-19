@@ -14,7 +14,9 @@ public class Product extends BaseModel {
   private String imageUrl;
   private String description;
   private double price;
+
   @ManyToOne(cascade = CascadeType.ALL) // Form Product to Category
   private Category category;
+
   private boolean isSalesSpecific;
 }

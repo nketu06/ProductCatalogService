@@ -5,9 +5,13 @@ import com.example.ProductCatalogService.dtos.ProductDto;
 import com.example.ProductCatalogService.models.Category;
 import com.example.ProductCatalogService.models.Product;
 import com.example.ProductCatalogService.models.State;
-import com.example.ProductCatalogService.services.ProductService;
+import com.example.ProductCatalogService.repository.ProductRepo;
+import com.example.ProductCatalogService.services.IProductService;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +20,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/products")
 public class ProductController {
 
-  @Autowired private ProductService productService;
+  @Qualifier("storageProductService")
+  @Autowired
+  private IProductService productService;
+
+  @Autowired private ProductRepo productRepo;
 
   @GetMapping
-  public List<Product> getAllProducts() {
-    Product product = new Product();
-    product.setId(1);
-    product.setTitle("iPhone 13");
-    product.setDescription("The latest iPhone model with A15 Bionic chip.");
-    product.setPrice(999.99);
-    product.setState(State.ACTIVE);
-    return List.of(product);
+  public List<ProductDto> getAllProducts() {
+    List<Product> products = productService.getAllProducts();
+    List<ProductDto> productDtos = new ArrayList<>();
+    for (Product product : products) {
+      ProductDto productDto = mapProductToProductDto(product);
+      productDtos.add(productDto);
+    }
+    return productDtos;
   }
 
   @GetMapping("{id}")
@@ -44,7 +52,9 @@ public class ProductController {
 
   @PostMapping
   public ProductDto createProduct(@RequestBody ProductDto input) {
-    return input;
+    Product product = mapProductDtoToProduct(input);
+    Product output = productService.createProduct(product);
+    return mapProductToProductDto(output);
   }
 
   @PutMapping("{id}")
@@ -57,6 +67,14 @@ public class ProductController {
       return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+
+  @DeleteMapping("{id}")
+  public void deleteProduct(@PathVariable("id") Long productId) {
+    if (productId <= 0) {
+      throw new IllegalArgumentException("Product ID cannot be zero or negative.");
+    }
+    productService.deleteProductById(productId);
   }
 
   private ProductDto mapProductToProductDto(Product product) {
