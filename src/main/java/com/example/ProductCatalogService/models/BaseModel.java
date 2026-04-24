@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @MappedSuperclass
 public abstract class BaseModel {
-  @Id private long id;
+  @Id private Long id;
   private Date createdAt;
   private Date lastUpdatedAt;
   private State state;
