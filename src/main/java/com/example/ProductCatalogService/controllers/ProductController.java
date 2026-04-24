@@ -4,10 +4,8 @@ import com.example.ProductCatalogService.dtos.CategoryDto;
 import com.example.ProductCatalogService.dtos.ProductDto;
 import com.example.ProductCatalogService.models.Category;
 import com.example.ProductCatalogService.models.Product;
-import com.example.ProductCatalogService.models.State;
 import com.example.ProductCatalogService.repository.ProductRepo;
 import com.example.ProductCatalogService.services.IProductService;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

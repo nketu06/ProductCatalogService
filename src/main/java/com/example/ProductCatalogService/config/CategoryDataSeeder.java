@@ -1,17 +1,17 @@
-//package com.example.ProductCatalogService.config;
+// package com.example.ProductCatalogService.config;
 //
-//import com.example.ProductCatalogService.models.Category;
-//import com.example.ProductCatalogService.models.Product;
-//import com.example.ProductCatalogService.repository.CategoryRepo;
-//import com.example.ProductCatalogService.repository.ProductRepo;
-//import java.util.List;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.boot.CommandLineRunner;
-//import org.springframework.stereotype.Component;
+// import com.example.ProductCatalogService.models.Category;
+// import com.example.ProductCatalogService.models.Product;
+// import com.example.ProductCatalogService.repository.CategoryRepo;
+// import com.example.ProductCatalogService.repository.ProductRepo;
+// import java.util.List;
+// import lombok.RequiredArgsConstructor;
+// import org.springframework.boot.CommandLineRunner;
+// import org.springframework.stereotype.Component;
 //
-//@Component
-//@RequiredArgsConstructor
-//public class CategoryDataSeeder implements CommandLineRunner {
+// @Component
+// @RequiredArgsConstructor
+// public class CategoryDataSeeder implements CommandLineRunner {
 //  private final CategoryRepo categoryRepo;
 //  private final ProductRepo productRepo;
 //
@@ -25,7 +25,8 @@
 //            createCategory(4L, "Books", "Fiction, non-fiction, and educational books"));
 //
 //    List<Category> missingCategories =
-//        seedCategories.stream().filter(category -> !categoryRepo.existsById(category.getId())).toList();
+//        seedCategories.stream().filter(category ->
+// !categoryRepo.existsById(category.getId())).toList();
 //
 //    if (!missingCategories.isEmpty()) {
 //      categoryRepo.saveAll(missingCategories);
@@ -104,7 +105,8 @@
 //                books));
 //
 //    List<Product> missingProducts =
-//        seedProducts.stream().filter(product -> !productRepo.existsById(product.getId())).toList();
+//        seedProducts.stream().filter(product ->
+// !productRepo.existsById(product.getId())).toList();
 //
 //    if (!missingProducts.isEmpty()) {
 //      productRepo.saveAll(missingProducts);
@@ -136,5 +138,5 @@
 //    product.setSalesSpecific(false);
 //    return product;
 //  }
-//}
+// }
 //

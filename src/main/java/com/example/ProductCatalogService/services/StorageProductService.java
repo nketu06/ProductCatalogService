@@ -5,7 +5,6 @@ import com.example.ProductCatalogService.exceptions.ProductNotFoundException;
 import com.example.ProductCatalogService.models.Product;
 import com.example.ProductCatalogService.models.State;
 import com.example.ProductCatalogService.repository.ProductRepo;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

@@ -16,10 +16,8 @@ public class Category extends BaseModel {
   private String title;
   private String description;
 
-//  by default lazy
-  @OneToMany(mappedBy = "category",fetch = FetchType.LAZY)
+  //  by default lazy
+  @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
   @Fetch(FetchMode.SELECT)
   private List<Product> products;
 }
-
-
