@@ -1,8 +1,8 @@
 package com.example.ProductCatalogService.services;
 
 import com.example.ProductCatalogService.models.Product;
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ISearchService {
-  List<Product> serachProducts(String query, Integer pageNumber, Integer page);
+  Page<Product> serachProducts(String query, Integer pageNumber, Integer page);
 }
